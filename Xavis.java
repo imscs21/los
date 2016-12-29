@@ -163,7 +163,7 @@ implements Runnable
 				
 				if(isSuccessAndIsClear(content)){
 					System.out.println("Stage Clear!");
-				}else{//tested on only mac (java ver 1.8.91)
+				}else{//tested on only mac (java ver 1.8.91) and windows NT isn`t seemed to be compatible on encoding(windows java ver 1.8.111 - x86) with string variable
 					System.out.println("failed...(please apply on another java environment , and Integer Numbers in found:: logs are accurate data.)");
 				}
 				}
