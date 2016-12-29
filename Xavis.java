@@ -112,7 +112,7 @@ implements Runnable
 			System.out.printf("we will loop %d times for single byte unicode data belong string data\n",pwlen);
 			String passwd = "none";
 			 final char[] aa=new char[pwlen];
-			 Thread[] ths = new Thread[aa.length];
+			 Thread[] ths = new Thread[aa.length]; //if password length is over 50,I suggest you to use ThreadPoolExecutor instead of this variable
 			 
 			 for(int i=0;i<aa.length;i++){
 				 ths[i] = new SearchThread(i,aa,conf);
