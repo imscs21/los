@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 /**
-* los problem solving example
+* solving los problem example
 * @author imscs21
 * @url https://github.com/imscs21/los
 * 
