@@ -225,7 +225,7 @@ public void run(){
 }
 	public static void main(String... args){
 		try{
-		Runnable bi = (Runnable) Class.forName(Thread.currentThread().getStackTrace()[1].getClassName()).newInstance(); // new BlindInjection3();//getClass().newInstance();
+		Runnable bi = (Runnable) Class.forName(Thread.currentThread().getStackTrace()[1].getClassName()).newInstance(); // new Xavis();//getClass().newInstance();
 		System.out.println( Thread.currentThread().getStackTrace()[1].getClassName());
 		Thread th = new Thread(bi);
 		th.start();
