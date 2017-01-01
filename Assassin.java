@@ -334,9 +334,9 @@ String content;
 		if(checkAns){
 			leng_lst.remove(0);
 		}
-		else{
-			lst=nxt_lst; 
-		}
+
+		lst=nxt_lst; 
+		
 		
 	}
 	
