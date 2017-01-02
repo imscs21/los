@@ -291,6 +291,7 @@ String content;
 		}});
 	}
 	waitTask(tpe);
+	ArrayList<String> remainLst = new ArrayList<String>();
 	while(leng_lst.size()>0){
 		final ArrayList<String> nxt_lst = new ArrayList<String>();
 		boolean checkAns = false;
@@ -323,6 +324,12 @@ String content;
 					if(isSuccess(content)){
 						System.out.println("added:: "+johap);
 						nxt_lst.add(johap);
+						if(isSuccessWithAdmin(content)&&isClear(content)){
+							System.out.println("Answer is found and stage is cleared!");	
+						System.out.println(String.format( "Password is '%s'",ori));
+						System.out.println(String.format( "Password is '%s'",URLEncoder.encode( ori)));
+						remainLst.add(johap);
+						}
 					}
 					}catch(Exception e2){}}});
 				}
@@ -339,7 +346,9 @@ String content;
 		
 		
 	}
-	
+	for(String st:remainLst){
+		lst.add(st);
+	}
 	try{
 		tpe.purge();
 		tpe.shutdownNow();
