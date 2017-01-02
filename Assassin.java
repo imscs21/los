@@ -324,6 +324,8 @@ String content;
 					if(isSuccess(content)){
 						System.out.println("added:: "+johap);
 						nxt_lst.add(johap);
+						 sub_query = "?pw="+String.format("%s",URLEncoder.encode( johap));
+						 content = queryContent(conf,sub_query);
 						if(isSuccessWithAdmin(content)&&isClear(content)){
 							System.out.println("Answer is found and stage is cleared!");	
 						System.out.println(String.format( "Password is '%s'",ori));
