@@ -291,8 +291,8 @@ String content;
 		}});
 	}
 	waitTask(tpe);
-	ArrayList<String> remainLst = new ArrayList<String>();
-	while(leng_lst.size()>0){
+	ArrayList<String> remainLst = new ArrayList<String>(); //it works as bfs,so you can use queue	
+/while(leng_lst.size()>0){
 		final ArrayList<String> nxt_lst = new ArrayList<String>();
 		boolean checkAns = false;
 		for(String ori:lst){
